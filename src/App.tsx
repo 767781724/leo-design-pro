@@ -1,26 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { IRootSate } from './redux/reducers/index';
+import { getUserData } from './redux/actions/user';
 
-function App() {
+const App = () => {
+  const name = useSelector((state: IRootSate) => state.user.name);
+  const dispatch = useDispatch();
+  const [num, setNum] = useState(0);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <p>{name}</p>
+      <button
+        onClick={() => {
+          setNum((e) => e + 1);
+          dispatch(getUserData({ name: `demo` + num }));
+        }}
+      >
+        修改
+      </button>
     </div>
   );
-}
+};
 
 export default App;
