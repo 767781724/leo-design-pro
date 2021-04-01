@@ -1,4 +1,7 @@
+import { IMenuConfigs } from '@src/types/system';
 export type IUserReducer = {
-  name: string;
+  username: string;
   loading: boolean;
+  login: boolean;
+  menus: IMenuConfigs[];
 };
