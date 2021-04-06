@@ -35,7 +35,6 @@ const App = () => {
     );
   }, []);
   const routes = useMemo(() => {
-    console.log('路由生成');
     return <FRouteView>{generatorDynamicRouter(menus)}</FRouteView>;
   }, [menus]);
   if (initDone === false)

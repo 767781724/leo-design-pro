@@ -1,6 +1,6 @@
 {
   "HELLO": "Hello,{name}. Welcome to {where}",
-  "platform_name": "分销管理平台",
+  "platform_name": "管理平台",
   "login": "登录",
   "username": "用户名",
   "password": "密码",

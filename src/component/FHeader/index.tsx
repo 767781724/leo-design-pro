@@ -35,7 +35,7 @@ const FHeader = () => {
           icon={<LogoutOutlined style={{ fontSize: 18 }} />}
           onClick={() => {
             Modal.confirm({
-              title: 'Do you Want to delete these items?',
+              title: '确定退出此账号么?',
               icon: <ExclamationCircleOutlined />,
               content: 'Some descriptions',
               onOk() {

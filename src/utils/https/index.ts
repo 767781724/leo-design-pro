@@ -20,7 +20,7 @@ interface AxiosRequest {
   responseType?: ResponseType;
 }
 
-class BaseHttpModel<T = any> {
+export class BaseHttpModel<T = any> {
   code: number;
   msg: string;
   tips: string;

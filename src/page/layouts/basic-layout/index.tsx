@@ -1,9 +1,8 @@
-import { Breadcrumb, Layout } from 'antd';
+import { Layout } from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import './index.less';
 import classNames from 'classnames';
-import { useLocation } from 'react-router-dom';
 import { FHeader, FMenu, FRouteView } from '@src/component';
 import { connect } from 'react-redux';
 import { IRootState } from '../../../redux/reducers/index';
@@ -16,16 +15,12 @@ type IBasicLayoutProps = {} & ReturnType<typeof mapStateToProps>;
 
 const BasicLayout: FC<IBasicLayoutProps> = ({ menus, children }) => {
   const [collapsed, setCollapsed] = useState(false);
-  const location = useLocation();
   const toggle = () => {
     setCollapsed(!collapsed);
   };
   const breakPoint = (broken: boolean) => {
     setCollapsed(broken);
   };
-  useEffect(() => {
-    console.log(location.pathname);
-  }, [location]);
   return (
     <Layout className={PREFIX}>
       <Sider
@@ -59,10 +54,10 @@ const BasicLayout: FC<IBasicLayoutProps> = ({ menus, children }) => {
           <FHeader />
         </Header>
         <Content className={`${PREFIX}-content`}>
-          <Breadcrumb className={`${PREFIX}-content-breadcrumb`}>
+          {/* <Breadcrumb className={`${PREFIX}-content-breadcrumb`}>
             <Breadcrumb.Item>User</Breadcrumb.Item>
             <Breadcrumb.Item>Bill</Breadcrumb.Item>
-          </Breadcrumb>
+          </Breadcrumb> */}
           <div className={`${PREFIX}-content-main`}>
             <FRouteView>{children}</FRouteView>
           </div>
