@@ -5,8 +5,21 @@
    height: 100%;
    &-logo {
     height: 32px;
-    margin: 16px;
-    background: rgba(255, 255, 255, 0.3);
+    margin: 16px 0;
+    text-align: center;
+    overflow: hidden;
+    >img{
+      width: 32px;
+      border-radius: 50%;
+    }
+    >span{
+      font-size: 18px;
+      color: white;
+      font-weight: bold;
+      white-space: nowrap;
+      margin-left: 10px;
+      overflow: hidden;
+    }
   }
   &-sider{
     position: relative;
@@ -17,9 +30,6 @@
   &-content{
     height: 100%;
     overflow: auto;
-    &-breadcrumb{
-      margin: 15px 0;
-    }
     &-main{
       margin: 15px 15px;
     }

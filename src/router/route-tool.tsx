@@ -24,28 +24,7 @@ const rootLayout: IRouteConfigs = {
   component: 'layouts/basic-layout/index.tsx',
   exact: false,
   auth: true,
-  children: [
-    {
-      path: '/account',
-      exact: false,
-      auth: true,
-      component: 'system/account/index.tsx',
-      children: [
-        {
-          path: '/account/center',
-          exact: true,
-          auth: true,
-          component: 'system/account/center',
-        },
-        {
-          path: '/account/setting',
-          exact: true,
-          auth: true,
-          component: 'system/account/setting',
-        },
-      ],
-    },
-  ],
+  children: [],
 };
 /**
  *
@@ -74,9 +53,11 @@ export const listToRoute = (list: IMenuConfigs[], routes: IRouteConfigs[]) => {
       const child = {
         path: e.path,
         component: e.component,
-        exact: e.exact || true,
+        // 父页面的 exact为false
+        exact: e.exact || (e.children && e.children.length > 0 ? false : true),
         auth: true,
         children: [],
+        redirect: e.redirect, // 根路径重定向跳转
       };
       if (!!e.children && e.children.length > 0) {
         listToRoute(e.children, child.children);
@@ -94,9 +75,10 @@ export const buildRouteNode = (config: Array<IRouteConfigs>): ReactNode[] => {
   const { login } = store.getState().user;
   routes = config.map((e, index) => {
     const DynamicComponent = lazy(() => import(`@src/page/${e.component}`));
+    const path = e.redirect ? [e.redirect, e.path] : e.path;
     const attirbute: IRouteItemProps = {
       key: _.uniqueId('route_'),
-      path: e.path,
+      path: path,
       exact: e.exact,
       render: (props) => {
         // 验证登录 拦截
@@ -115,16 +97,6 @@ export const buildRouteNode = (config: Array<IRouteConfigs>): ReactNode[] => {
         }
       },
     };
-    // if (_.isArray(e.children) && e.children.length > 0) {
-    //   const DynamicComponent = lazy(() => import(`@src/page/${e.component}`));
-    //   attirbute.render = (props) => (
-    //     <DynamicComponent {...props}>
-    //       {e.children && buildRouteNode(e.children)}
-    //     </DynamicComponent>
-    //   );
-    // } else {
-    //   attirbute.component = lazy(() => import(`@src/page/${e.component}`));
-    // }
     return <Route {...attirbute} />;
   });
   routes.push(

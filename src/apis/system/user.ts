@@ -10,8 +10,8 @@ import HttpApi from '@src/utils/https';
  */
 export function login(params: any) {
   return HttpApi.request<IUserModel>({
-    url: 'http://localhost:8090/user/login',
-    method: 'GET',
-    params,
+    url: '/user/login',
+    method: 'POST',
+    data: params,
   });
 }

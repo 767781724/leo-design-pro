@@ -92,7 +92,17 @@ const SearchString2Object = (
   _.forEach(defaultValue, (value, key) => {
     result[key] = convertInner(value, params.get(key));
   });
-  console.log(result);
   return result;
 };
-export { Object2SearchString, SearchString2Object };
+const GetRequest = (url: string) => {
+  var theRequest: any = {};
+  if (url.indexOf('?') !== -1) {
+    const str = url.split('?');
+    const strs = str[1].split('&');
+    for (let i = 0; i < strs.length; i++) {
+      theRequest[strs[i].split('=')[0]] = decodeURI(strs[i].split('=')[1]);
+    }
+  }
+  return theRequest;
+};
+export { Object2SearchString, SearchString2Object, GetRequest };

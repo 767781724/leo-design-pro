@@ -1,59 +1,37 @@
-import { FBaseListPage, FIconFont } from '@src/component';
-import './index.less';
+import { FBaseListPage } from '@src/component';
 import { Button, Divider, Space } from 'antd';
+import intl from 'react-intl-universal';
 import { PlusOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
-import intl from 'react-intl-universal';
 import AddForm from './addForm';
 
-const MenuPage = () => {
+const RolePage = () => {
   const [visible, setVisible] = useState(false);
   return (
     <FBaseListPage
-      queryApi="/menu/list"
+      queryApi="/role/list"
       rowKey="id"
       leftNode={[
         <Button
           onClick={() => setVisible(true)}
-          type="primary"
           icon={<PlusOutlined />}
+          type="primary"
         >
-          {intl.get('add_menu')}
+          {intl.get('add_role')}
         </Button>,
       ]}
       columns={[
         {
-          title: '菜单名称',
+          title: '角色名称',
           dataIndex: 'name',
-          width: '20%',
         },
         {
-          title: '菜单类型',
-          dataIndex: 'type',
-          render: (value) => {
-            return value === 0 ? '菜单' : '目录';
-          },
+          title: '角色描述',
+          dataIndex: 'desc',
         },
         {
-          title: '图标',
-          dataIndex: 'icon',
-          render: (value) => {
-            return value ? (
-              <FIconFont type={value} style={{ fontSize: 18 }} />
-            ) : null;
-          },
-        },
-        {
-          title: '组件',
-          dataIndex: 'component',
-        },
-        {
-          title: '路由地址',
-          dataIndex: 'path',
-        },
-        {
-          title: '排序',
-          dataIndex: 'sort',
+          title: '创建时间',
+          dataIndex: 'time',
         },
         {
           title: '操作',
@@ -73,4 +51,4 @@ const MenuPage = () => {
   );
 };
 
-export default MenuPage;
+export default RolePage;

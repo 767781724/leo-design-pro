@@ -1,3 +1,4 @@
+import { FFormItemIconSelector } from '@src/component';
 import {
   Button,
   Col,
@@ -7,6 +8,7 @@ import {
   InputNumber,
   Modal,
   ModalProps,
+  Radio,
   Row,
   Space,
   Switch,
@@ -67,11 +69,27 @@ const AddForm = (props: IAddFormProps) => {
               <Input />
             </Form.Item>
           </Col>
+          {/* 菜单层级 */}
           <Col span={12}>
             <Form.Item
               label={intl.get('menu_level')}
               name="menu_level"
               rules={[{ required: true }]}
+            >
+              <Radio.Group>
+                <Radio value="菜单">菜单</Radio>
+                <Radio value="目录">目录</Radio>
+              </Radio.Group>
+            </Form.Item>
+          </Col>
+        </Row>
+        {/* 主页面选择 */}
+        <Row gutter={24}>
+          <Col span={12}>
+            <Form.Item
+              tooltip={intl.get('tooltip_redirect')}
+              label={intl.get('redirect')}
+              name="is_root"
             >
               <Input />
             </Form.Item>
@@ -106,16 +124,21 @@ const AddForm = (props: IAddFormProps) => {
               <InputNumber style={{ width: '100%' }} />
             </Form.Item>
           </Col>
+          {/* icon 选择 */}
           <Col span={12}>
             <Form.Item name="icon" label={intl.get('icon')}>
-              <Input />
+              <FFormItemIconSelector placeholder={intl.get('rule_icon')} />
             </Form.Item>
           </Col>
         </Row>
         <Row gutter={24}>
           <Col span={12}>
-            <Form.Item name="is_show" label={intl.get('is_show')}>
-              <Switch />
+            <Form.Item
+              valuePropName="checked"
+              name="is_show"
+              label={intl.get('is_show')}
+            >
+              <Switch defaultChecked />
             </Form.Item>
           </Col>
         </Row>
