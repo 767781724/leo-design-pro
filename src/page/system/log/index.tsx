@@ -1,29 +1,13 @@
 import { FBaseListPage, FFormItemRangePicker } from '@src/component';
 import React from 'react';
 import './index.less';
-import { Button, Input, Select } from 'antd';
+import { Input, Select } from 'antd';
 
 const LogPage = () => {
   return (
     <FBaseListPage
       queryApi="/log/list"
       rowKey="id"
-      leftNode={[
-        (keys: any) => {
-          return (
-            <Button
-              type="primary"
-              onClick={() => {
-                console.log(keys);
-              }}
-            >
-              btn1
-            </Button>
-          );
-        },
-        <Button type="primary">btn2</Button>,
-      ]}
-      rightNode={[<Button type="primary">btn3</Button>]}
       conditions={[
         {
           id: 'id1',

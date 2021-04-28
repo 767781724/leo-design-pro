@@ -3,17 +3,17 @@ import Axios from 'axios';
 
 const axios = Axios.create();
 
-// axios.interceptors.request.use((value) => {});
+axios.interceptors.request.use((value) => {
+  value.headers = {
+    device: 'web',
+  };
+  return value;
+});
 
 axios.interceptors.response.use(
   (res) => {
     if (res.status === 200) {
-      if (res.data.code === 200) {
-        return Promise.resolve(res.data);
-      } else {
-        openErrorNotification(res.data.msg);
-        return Promise.reject(res);
-      }
+      return Promise.resolve(res);
     } else {
       openErrorNotification(res.statusText, 'Network Error');
       return Promise.reject(res);

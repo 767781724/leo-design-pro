@@ -1,5 +1,6 @@
 import { login } from '@src/apis/system/user';
 import { CallReturnType } from '@src/types/saga';
+import { push } from 'connected-react-router';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import {
   IGetUserDataAction,
@@ -15,11 +16,12 @@ function* asyncGetUserData(params: IGetUserDataAction) {
     });
     if (res.code === 200) {
       yield put(setUserData(res.data));
+      yield put(push('/'));
     } else {
-      yield put(getDataError());
+      yield put(getDataError({ code: res.code, msg: res.msg }));
     }
   } catch (error) {
-    yield put(getDataError());
+    yield put(getDataError({ code: error.code, msg: error.msg }));
   }
 }
 
