@@ -1,4 +1,4 @@
-import { ILoginProps, IUserModel } from '@src/types/model/user';
+import { ILoginProps, IUserModel } from '@src/model/user';
 import HttpApi from '@src/utils/https';
 
 /**

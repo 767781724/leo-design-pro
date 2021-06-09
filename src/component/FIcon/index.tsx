@@ -6,6 +6,6 @@ import { createFromIconfontCN } from '@ant-design/icons';
  * @date 2021-03-30 11:46:11
  */
 const FIconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_2480096_1chmdq7wx09.js',
+  scriptUrl: '//at.alicdn.com/t/font_2587307_kbj81pcb4qk.js',
 });
 export default FIconFont;

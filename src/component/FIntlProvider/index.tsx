@@ -32,8 +32,7 @@ const FIntlProvider: FC<IFIntlProviderProps> = ({ children }) => {
       </div>
     );
   }, []);
-  if (initDone === false)
-    return <React.Fragment>{suspenseSpin}</React.Fragment>;
+  if (initDone === false) return <React.Fragment>{suspenseSpin}</React.Fragment>;
   return <ConfigProvider locale={AntdZhCN}>{children}</ConfigProvider>;
 };
 

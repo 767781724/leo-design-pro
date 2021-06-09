@@ -13,11 +13,7 @@ const MenuPage = () => {
       queryApi="/menu/list"
       rowKey="id"
       leftNode={[
-        <Button
-          onClick={() => setVisible(true)}
-          type="primary"
-          icon={<PlusOutlined />}
-        >
+        <Button onClick={() => setVisible(true)} type="primary" icon={<PlusOutlined />}>
           {intl.get('add_menu')}
         </Button>,
       ]}
@@ -38,9 +34,7 @@ const MenuPage = () => {
           title: '图标',
           dataIndex: 'icon',
           render: (value) => {
-            return value ? (
-              <FIconFont type={value} style={{ fontSize: 18 }} />
-            ) : null;
+            return value ? <FIconFont type={value} style={{ fontSize: 18 }} /> : null;
           },
         },
         {

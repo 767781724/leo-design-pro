@@ -5,14 +5,9 @@ interface IFormItemUploadProps {
   uploadState: UploadProps;
   loading: boolean;
 }
-type IFormItemUploadAction =
-  | ((e: IFormItemUploadProps) => IFormItemUploadProps)
-  | Object;
+type IFormItemUploadAction = ((e: IFormItemUploadProps) => IFormItemUploadProps) | Object;
 
-export function UploadReducer(
-  state: IFormItemUploadProps,
-  action: IFormItemUploadAction
-) {
+export function UploadReducer(state: IFormItemUploadProps, action: IFormItemUploadAction) {
   if (_.isFunction(action)) {
     return { ...state, ...action(state) };
   }

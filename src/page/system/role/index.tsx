@@ -12,11 +12,7 @@ const RolePage = () => {
       queryApi="/role/list"
       rowKey="id"
       leftNode={[
-        <Button
-          onClick={() => setVisible(true)}
-          icon={<PlusOutlined />}
-          type="primary"
-        >
+        <Button onClick={() => setVisible(true)} icon={<PlusOutlined />} type="primary">
           {intl.get('add_role')}
         </Button>,
       ]}

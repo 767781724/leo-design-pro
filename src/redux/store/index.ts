@@ -6,10 +6,7 @@ import rootSage from '@src/redux/saga/index';
 import history from '@src/router/route-root';
 const sagaMiddleware = createSagaMiddleware();
 
-const store = createStore(
-  rootReducer,
-  applyMiddleware(sagaMiddleware, routerMiddleware(history))
-);
+const store = createStore(rootReducer, applyMiddleware(sagaMiddleware, routerMiddleware(history)));
 
 sagaMiddleware.run(rootSage);
 export default store;

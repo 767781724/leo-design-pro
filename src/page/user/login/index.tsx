@@ -13,10 +13,7 @@ const LoginPage = () => {
       <div className={`${PREFIX}-content`}>
         <Row align="middle" justify="center">
           <Col>
-            <img
-              src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
-              alt=""
-            />
+            <img src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" alt="" />
           </Col>
           <Col>
             <h1>{intl.get('platform_name')}</h1>

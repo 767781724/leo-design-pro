@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { FIconFont } from '../../';
 import icons from './icons';
 import './index.less';
+import { SettingOutlined } from '@ant-design/icons';
 
 interface IFIconSelectorProps {
   onSelect: (icon: string) => void;
@@ -25,11 +26,7 @@ interface IFFormItemIconSelectorProps {
   onChange?: (value: string) => void;
   placeholder?: string;
 }
-const FFormItemIconSelector = ({
-  value,
-  onChange,
-  placeholder,
-}: IFFormItemIconSelectorProps) => {
+const FFormItemIconSelector = ({ value, onChange, placeholder }: IFFormItemIconSelectorProps) => {
   const [visibleIcon, setVisibleIcon] = useState(false);
   return (
     <div>
@@ -37,13 +34,7 @@ const FFormItemIconSelector = ({
         disabled
         value={value}
         placeholder={placeholder}
-        addonAfter={
-          <FIconFont
-            onClick={() => setVisibleIcon(true)}
-            type="icon-set"
-            style={{ fontSize: 18 }}
-          />
-        }
+        addonAfter={<SettingOutlined onClick={() => setVisibleIcon(true)} />}
       />
       <Modal
         width={600}

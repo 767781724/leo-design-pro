@@ -1,14 +1,9 @@
 import { ITableViewState } from '@src/types/baseTypes';
 import _ from 'lodash';
 
-export type ITableViewAction =
-  | ((e: ITableViewState) => ITableViewState)
-  | Object;
+export type ITableViewAction = ((e: ITableViewState) => ITableViewState) | Object;
 
-export function TableViewReducer(
-  state: ITableViewState,
-  action: ITableViewAction
-) {
+export function TableViewReducer(state: ITableViewState, action: ITableViewAction) {
   if (_.isFunction(action)) {
     return { ...state, ...action(state) };
   }

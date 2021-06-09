@@ -78,11 +78,11 @@ const FMenu = ({ menuList }: IFMenuProps) => {
   useEffect(() => {
     initMenuKey(location.pathname);
   }, [location, initMenuKey]);
-  const findMenuByKey = (key: string | number): IMenuConfigs | null => {
+  const findMenuByKey = (key: string): IMenuConfigs | null => {
     let result: IMenuConfigs | null = null;
     const recursion = (items: IMenuConfigs[]) => {
       for (const item of items) {
-        if (item.id === key) {
+        if (item.id.toString() === key) {
           result = item;
         }
         if (result === null && item.children) {
@@ -94,8 +94,9 @@ const FMenu = ({ menuList }: IFMenuProps) => {
     return result;
   };
   const menuClick = (e: MenuInfo) => {
-    const menu = findMenuByKey(e.key);
+    const menu = findMenuByKey(e.key.toString());
     setSelectKey([e.key.toString()]);
+
     if (menu && menu.path) {
       const path = _.isArray(menu.path) ? menu.path[1] : menu.path;
       history.push(path);
@@ -127,7 +128,7 @@ function BuildMenu(items: IMenuConfigs[]) {
   }
   let nodes = [];
   for (const item of items) {
-    if (!item.show) continue;
+    // if (!item.show) continue;
     if (item.children && item.children.length > 0) {
       nodes.push(
         <SubMenu key={item.id} title={BuildMenuTitle(item)}>

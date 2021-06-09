@@ -1,18 +1,12 @@
 import { IUserAction } from '../../actions/user';
-import {
-  GET_USER_DATA,
-  SET_USER_DATA,
-  GET_DATA_ERROR,
-  LOGOUT,
-} from '../../constants/userConstant';
+import { GET_USER_DATA, SET_USER_DATA, GET_DATA_ERROR, LOGOUT } from '../../constants/userConstant';
 import { IUserReducer } from './types';
 
 const localState = sessionStorage.getItem('USER_DATA');
 const initState: IUserReducer = localState
   ? JSON.parse(localState)
   : {
-      username: '',
-      menus: [],
+      menus: require('./menu.json'),
       login: false,
       loading: false,
     };
@@ -34,7 +28,7 @@ const userReducer = (state = initState, action: IUserAction): IUserReducer => {
       return Object.assign({}, state, { loading: false, error: action.data });
     case LOGOUT:
       sessionStorage.removeItem('USER_DATA');
-      return { ...state, login: false };
+      return { ...state, login: false, menus: [] };
     default:
       return state;
   }

@@ -16,3 +16,7 @@ export { default as FFormItemDatePicker } from './FFormItem/FFormItemDatePicker'
 export { default as FFormItemIconSelector } from './FFormItem/FFormItemIconSelector';
 export { default as FFormItemUpload } from './FFormItem/FFormItemUpload';
 export { default as FFormItemRangeInput } from './FFormItem/FFormItemRangeInput';
+export { default as FFormItemSelect } from './FFormItem/FFormItemSelect';
+export { default as FFormItemCheckbox } from './FFormItem/FFormItemCheckbox';
+export { default as FFormItemSwitch } from './FFormItem/FFormItemSwitch';
+export { default as FFormItemText } from './FFormItem/FFormItemText';

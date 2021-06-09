@@ -3,22 +3,17 @@ import React, { FC } from 'react';
 import { DatePickerProps } from 'antd/lib/date-picker';
 import moment, { Moment } from 'moment';
 
-interface IFFormItemRangePickerProps
-  extends Omit<DatePickerProps, 'value' | 'onChange'> {
+interface IFFormItemRangePickerProps extends Omit<DatePickerProps, 'value' | 'onChange'> {
   value?: string;
-  onChange?: (value: string | null) => void;
+  onChange?: (value: string | undefined) => void;
 }
 
-const FFormItemRangePicker: FC<IFFormItemRangePickerProps> = ({
-  value,
-  onChange,
-  ...props
-}) => {
+const FFormItemRangePicker: FC<IFFormItemRangePickerProps> = ({ value, onChange, ...props }) => {
   const changeDate = (values: Moment | null, formatString: string) => {
     if (!!values) {
       onChange && onChange(formatString);
     } else {
-      onChange && onChange(null);
+      onChange && onChange(undefined);
     }
   };
   const value2Moment = (): Moment | null => {
@@ -28,11 +23,7 @@ const FFormItemRangePicker: FC<IFFormItemRangePickerProps> = ({
     return null;
   };
   return (
-    <DatePicker
-      style={{ width: '100%' }}
-      value={value2Moment()}
-      onChange={changeDate}
-    />
+    <DatePicker style={{ width: '100%' }} value={value2Moment()} onChange={changeDate} {...props} />
   );
 };
 

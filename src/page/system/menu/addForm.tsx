@@ -101,9 +101,7 @@ const AddForm = (props: IAddFormProps) => {
             <Form.Item
               label={intl.get('web_component')}
               name="web_component"
-              rules={[
-                { required: true, message: intl.get('rule_web_component') },
-              ]}
+              rules={[{ required: true, message: intl.get('rule_web_component') }]}
             >
               <Input placeholder={intl.get('rule_web_component')} />
             </Form.Item>
@@ -133,11 +131,7 @@ const AddForm = (props: IAddFormProps) => {
         </Row>
         <Row gutter={24}>
           <Col span={12}>
-            <Form.Item
-              valuePropName="checked"
-              name="is_show"
-              label={intl.get('is_show')}
-            >
+            <Form.Item valuePropName="checked" name="is_show" label={intl.get('is_show')}>
               <Switch defaultChecked />
             </Form.Item>
           </Col>

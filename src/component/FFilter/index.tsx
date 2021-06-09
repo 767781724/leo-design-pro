@@ -1,10 +1,4 @@
-import React, {
-  ForwardedRef,
-  forwardRef,
-  useImperativeHandle,
-  useMemo,
-  useState,
-} from 'react';
+import React, { ForwardedRef, forwardRef, useImperativeHandle, useMemo, useState } from 'react';
 import { Button, Col, Form, FormInstance, Row, Space } from 'antd';
 import { UpOutlined, DownOutlined } from '@ant-design/icons';
 import './index.less';
@@ -25,10 +19,7 @@ export interface IFFilterRef {
   form: FormInstance | null;
 }
 
-const Filter = (
-  { items, onSearch }: IFFilterProps,
-  ref: ForwardedRef<IFFilterRef>
-) => {
+const Filter = ({ items, onSearch }: IFFilterProps, ref: ForwardedRef<IFFilterRef>) => {
   const [expand, setExpand] = useState(false);
   const [form] = Form.useForm();
   const onExpand = () => {
@@ -54,7 +45,8 @@ const Filter = (
         <Col
           xl={item.span || defSpan}
           lg={8}
-          sm={24}
+          sm={12}
+          xs={24}
           key={i}
           style={{ display: i < count ? 'block' : 'none' }}
         >
@@ -82,11 +74,16 @@ const Filter = (
   };
   if (items === undefined || items.length === 0) return null;
   return (
-    <Form form={form} className={PREFIX} onFinish={onFinish}>
+    <Form
+      form={form}
+      // labelCol={{ span: 6 }}
+      className={PREFIX}
+      onFinish={onFinish}
+    >
       <Row gutter={24}>
         {getFields}
         <Col lg={defSpan} sm={24}>
-          <Space>
+          <Space style={{ marginBottom: 15 }}>
             <Button type="primary" htmlType="submit">
               查询
             </Button>

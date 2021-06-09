@@ -26,14 +26,7 @@ const PasswordView = () => {
   };
   return (
     <div>
-      {error && (
-        <Alert
-          style={{ marginBottom: 24 }}
-          message={error.msg}
-          type="error"
-          closable
-        />
-      )}
+      {error && <Alert style={{ marginBottom: 24 }} message={error.msg} type="error" closable />}
       <Form
         size="large"
         initialValues={{ remember: true }}
@@ -51,10 +44,7 @@ const PasswordView = () => {
           />
         </Form.Item>
 
-        <Form.Item
-          name="password"
-          rules={[{ required: true, message: intl.get('rule_password') }]}
-        >
+        <Form.Item name="password" rules={[{ required: true, message: intl.get('rule_password') }]}>
           <Input.Password
             prefix={<LockOutlined style={{ color: '#1890FF' }} />}
             placeholder={intl.get('password')}

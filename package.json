@@ -93,8 +93,11 @@
     "workbox-webpack-plugin": "5.1.4"
   },
   "scripts": {
+    "mock": "node scripts/start.js --REACT_APP_ENV=mock",
     "start": "node scripts/start.js --REACT_APP_ENV=local",
-    "build": "node scripts/build.js --REACT_APP_ENV=dev",
+    "build:dev": "node scripts/build.js --REACT_APP_ENV=dev",
+    "build:test": "node scripts/build.js --REACT_APP_ENV=test",
+    "build:prod": "node scripts/build.js --REACT_APP_ENV=prod",
     "test": "node scripts/test.js",
     "eslint": "eslint src --ext .ts,.tsx"
   },
@@ -105,7 +108,8 @@
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
-      "prettier --single-quote --write"
+      "eslint --fix --ext .ts,.tsx",
+      "prettier --write"
     ]
   },
   "browserslist": {

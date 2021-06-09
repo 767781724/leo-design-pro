@@ -2,11 +2,7 @@ import { login } from '@src/apis/system/user';
 import { CallReturnType } from '@src/types/saga';
 import { push } from 'connected-react-router';
 import { call, put, takeLatest } from 'redux-saga/effects';
-import {
-  IGetUserDataAction,
-  setUserData,
-  getDataError,
-} from '../../actions/user';
+import { IGetUserDataAction, setUserData, getDataError } from '../../actions/user';
 import { GET_USER_DATA } from '../../constants/userConstant';
 
 function* asyncGetUserData(params: IGetUserDataAction) {

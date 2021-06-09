@@ -2,14 +2,13 @@ import React, { useMemo } from 'react';
 import { Avatar, Badge, Col, Dropdown, Menu, Modal, Row } from 'antd';
 import {
   UserOutlined,
-  SettingOutlined,
-  TeamOutlined,
+  // TeamOutlined,
   LogoutOutlined,
   ExclamationCircleOutlined,
   BellOutlined,
 } from '@ant-design/icons';
 import './index.less';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '@src/redux/actions/user';
 import { IRootState } from '../../redux/reducers/index';
@@ -26,18 +25,12 @@ const FHeader = ({ title }: IFHeaderProps) => {
   const menu = useMemo(
     () => (
       <Menu className={`${PREFIX}-menu`}>
-        <Menu.Item
+        {/* <Menu.Item
           className={`${PREFIX}-menu-item`}
           icon={<TeamOutlined className={`${PREFIX}-menu-item-icon`} />}
         >
-          <Link to="/account/center">用户中心</Link>
-        </Menu.Item>
-        <Menu.Item
-          className={`${PREFIX}-menu-item`}
-          icon={<SettingOutlined className={`${PREFIX}-menu-item-icon`} />}
-        >
-          <Link to="/account/setting">用户设置</Link>
-        </Menu.Item>
+          <Link to="/account-center">用户中心</Link>
+        </Menu.Item> */}
         <Menu.Item
           className={`${PREFIX}-menu-item`}
           icon={<LogoutOutlined className={`${PREFIX}-menu-item-icon`} />}
@@ -48,9 +41,9 @@ const FHeader = ({ title }: IFHeaderProps) => {
               content: '确定退出此账号么',
               onOk() {
                 return new Promise((resolve, reject) => {
-                  setLogout().then(() => {
-                    dispatch(logout());
+                  setLogout().finally(() => {
                     resolve(null);
+                    dispatch(logout());
                     history.push('/login');
                   });
                 });

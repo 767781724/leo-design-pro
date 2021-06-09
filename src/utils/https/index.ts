@@ -2,13 +2,7 @@ import { notification } from 'antd';
 import axios from './axios';
 
 export type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
-export type ResponseType =
-  | 'arraybuffer'
-  | 'blob'
-  | 'document'
-  | 'json'
-  | 'text'
-  | 'stream';
+export type ResponseType = 'arraybuffer' | 'blob' | 'document' | 'json' | 'text' | 'stream';
 
 interface AxiosRequest {
   baseURL?: string;
@@ -84,8 +78,7 @@ class HttpApi {
           }
         })
         .catch((err) => {
-          const message =
-            err?.data?.errorMessage || err?.message || url + '请求失败';
+          const message = err?.data?.errorMessage || err?.message || url + '请求失败';
           reject(new BaseHttpModel({ code: err.status, msg: message }));
         });
     });

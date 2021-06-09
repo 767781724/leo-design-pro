@@ -17,18 +17,14 @@ const listFormat = (req, json) => {
 const proxy = {
   'POST /passport/login': (req, res) => {
     const { account, password, verifyCode } = req.body;
-    if (
-      (account === 'admin' && password === '123456') ||
-      verifyCode === '1234'
-    ) {
+    if ((account === 'admin' && password === '123456') || verifyCode === '1234') {
       return res.send({
         code: 200,
         msg: '',
         data: {
           id: Random.integer(10000),
-          account: 'admin',
+          username: 'admin',
           password: '123456',
-          menus: require('./json/menu.json'),
         },
       });
     } else {

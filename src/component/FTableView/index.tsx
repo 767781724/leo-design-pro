@@ -1,9 +1,3 @@
-import {
-  ITableQueryParams,
-  IPageRes,
-  ITableViewProps,
-  ITableViewRef,
-} from '@src/types/baseTypes';
 import HttpApi, { BaseHttpModel } from '@src/utils/https';
 import { Alert } from 'antd';
 import _ from 'lodash';
@@ -16,14 +10,16 @@ import React, {
   useRef,
 } from 'react';
 import FTable from '../FTable';
-import { initialState, TableViewReducer } from './reducer';
+import { TableViewReducer } from './reducer';
 import './index.less';
+import { IPageRes, ITableQueryParams, ITableViewProps, ITableViewRef } from '@src/types/baseTypes';
 /**
  * @author Leo
  * @desc table表格view 封装分页请求等
  * @date 2021-04-02 16:57:04
  */
 const PREFIX = 'f-table-view';
+
 const FTableView = forwardRef<ITableViewRef, ITableViewProps>((props, ref) => {
   const queryParams = useRef<ITableQueryParams>({
     page: 1,
@@ -40,32 +36,51 @@ const FTableView = forwardRef<ITableViewRef, ITableViewProps>((props, ref) => {
       obj.size = pageSize;
     }
     queryParams.current = _.extend({}, queryParams.current, obj);
+    if (props.onPageChange) {
+      props.onPageChange(queryParams.current);
+    }
     query();
   };
   const onPageShowSizeChange = (page: number, pageSize: number) => {
     onPageChange(1, pageSize);
   };
   // 状态
-  const [state, dispatch] = useReducer(TableViewReducer, initialState, (e) => {
-    if (e.pagination) {
-      e.pagination.onChange = onPageChange;
-      e.pagination.onShowSizeChange = onPageShowSizeChange;
-    }
-    // 添加选择
-    if (e.tableProps && props.selector) {
-      e.tableProps.rowSelection = {
-        onChange: (selectedRowKeys, selectedRows) => {
-          let tableProps = state.tableProps;
-          if (tableProps && tableProps.rowSelection) {
-            tableProps.rowSelection.selectedRowKeys = selectedRowKeys;
-          }
-          dispatch({ selectedRowKeys, selectedRows, tableProps });
-        },
-      };
-    }
+  const [state, dispatch] = useReducer(
+    TableViewReducer,
+    {
+      pagination: {
+        current: 1,
+        pageSize: 10,
+        showTotal: (total: number, range: [number, number]) =>
+          `共 ${total} 项, 当前 ${range[0]}-${range[1]}`,
+        showQuickJumper: true,
+        showSizeChanger: true,
+        pageSizeOptions: ['5', '10', '20', '40', '60', '100', '150', '200'],
+      },
+      dataSource: [],
+      tableProps: {},
+    },
+    (e) => {
+      if (e.pagination) {
+        e.pagination.onChange = onPageChange;
+        e.pagination.onShowSizeChange = onPageShowSizeChange;
+      }
+      // 添加选择
+      if (props.selector) {
+        e.tableProps.rowSelection = {
+          onChange: (selectedRowKeys, selectedRows) => {
+            let tableProps = state.tableProps;
+            if (tableProps && tableProps.rowSelection) {
+              tableProps.rowSelection.selectedRowKeys = selectedRowKeys;
+            }
+            dispatch({ selectedRowKeys, selectedRows, tableProps });
+          },
+        };
+      }
 
-    return _.assign({}, e, props);
-  });
+      return _.assign({}, e, props);
+    }
+  );
   // 数据查询
   const query = useCallback(() => {
     let tableProps = state.tableProps;
@@ -84,8 +99,8 @@ const FTableView = forwardRef<ITableViewRef, ITableViewProps>((props, ref) => {
       if (state.pagination) {
         return {
           ...props.initalParams,
-          size: size,
-          page: page,
+          pageSize: size,
+          pageNum: page,
           ...conditions,
         };
       } else {
@@ -108,12 +123,12 @@ const FTableView = forwardRef<ITableViewRef, ITableViewProps>((props, ref) => {
       .then((res) => {
         let pagination = state.pagination;
         if (pagination) {
-          pagination.current = res.data.page;
-          pagination.pageSize = res.data.size;
-          pagination.total = res.data.totalPage * 1;
+          pagination.current = res.data.pageNum;
+          pagination.pageSize = res.data.pageSize;
+          pagination.total = res.data.totalPages * 1;
         }
         dispatch({
-          dataSource: res.data.list,
+          dataSource: state.pagination === false ? res.data : res.data.content,
           pagination,
           querying: false,
         });

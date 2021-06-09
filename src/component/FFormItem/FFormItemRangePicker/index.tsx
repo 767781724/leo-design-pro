@@ -5,31 +5,23 @@ import moment, { Moment } from 'moment';
 
 const { RangePicker } = DatePicker;
 
-interface IFFormItemRangePickerProps
-  extends Omit<RangePickerProps, 'value' | 'onChange'> {
+interface IFFormItemRangePickerProps extends Omit<RangePickerProps, 'value' | 'onChange'> {
   value?: [string, string];
   onChange?: (value: string[] | null) => void;
 }
 type EventValue<DateType> = DateType | null;
 type RangeValue<DateType> = [EventValue<DateType>, EventValue<DateType>] | null;
-const FFormItemRangePicker: FC<IFFormItemRangePickerProps> = ({
-  value,
-  onChange,
-  ...props
-}) => {
-  const changeDate = (
-    values: RangeValue<Moment>,
-    formatString: [string, string]
-  ) => {
+const FFormItemRangePicker: FC<IFFormItemRangePickerProps> = ({ value, onChange, ...props }) => {
+  const changeDate = (values: RangeValue<Moment>, formatString: [string, string]) => {
     if (!!values) {
       onChange && onChange(formatString);
     } else {
       onChange && onChange(null);
     }
   };
-  const value2Moment = (): [Moment, Moment] | null => {
+  const value2Moment = (): [Moment | null, Moment | null] | null => {
     if (value) {
-      return [moment(value[0]), moment(value[1])];
+      return [(!!value[0] && moment(value[0])) || null, (!!value[1] && moment(value[1])) || null];
     }
     return null;
   };
@@ -38,6 +30,8 @@ const FFormItemRangePicker: FC<IFFormItemRangePickerProps> = ({
       style={{ width: '100%' }}
       value={value2Moment()}
       onChange={changeDate}
+      allowEmpty={[true, true]}
+      {...props}
     />
   );
 };

@@ -1,9 +1,5 @@
-import {
-  SET_USER_DATA,
-  GET_USER_DATA,
-  GET_DATA_ERROR,
-} from '../constants/userConstant';
-import { ILoginProps, IUserModel } from '@src/types/model/user';
+import { SET_USER_DATA, GET_USER_DATA, GET_DATA_ERROR } from '../constants/userConstant';
+import { ILoginProps, IUserModel } from '@src/model/user';
 import { LOGOUT } from '../constants/userConstant';
 
 /**
@@ -46,10 +42,7 @@ export type IGetDataErrorAction = {
     msg: string;
   };
 };
-export const getDataError = (err: {
-  code: number;
-  msg: string;
-}): IGetDataErrorAction => ({
+export const getDataError = (err: { code: number; msg: string }): IGetDataErrorAction => ({
   type: GET_DATA_ERROR,
   data: err,
 });

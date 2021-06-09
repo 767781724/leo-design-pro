@@ -1,13 +1,4 @@
-import {
-  Button,
-  Form,
-  Input,
-  Modal,
-  ModalProps,
-  Row,
-  Space,
-  TreeSelect,
-} from 'antd';
+import { Button, Form, Input, Modal, ModalProps, Row, Space, TreeSelect } from 'antd';
 import intl from 'react-intl-universal';
 import React, { useEffect, useState } from 'react';
 import { getMenuList } from '@src/apis/system/menu';

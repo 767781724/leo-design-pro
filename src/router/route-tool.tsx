@@ -48,8 +48,8 @@ export const generatorDynamicRouter = (data: IMenuConfigs[]) => {
  * @date 2021-03-30 13:46:54
  */
 export const listToRoute = (list: IMenuConfigs[], routes: IRouteConfigs[]) => {
-  list.forEach((e) => {
-    if (!!e.component && !!e.path) {
+  list.forEach((e, index) => {
+    if (e.component && e.component !== 'PageView' && e.path) {
       const child = {
         path: e.path,
         component: e.component,
@@ -57,7 +57,6 @@ export const listToRoute = (list: IMenuConfigs[], routes: IRouteConfigs[]) => {
         exact: e.exact || (e.children && e.children.length > 0 ? false : true),
         auth: true,
         children: [],
-        redirect: e.redirect, // 根路径重定向跳转
       };
       if (!!e.children && e.children.length > 0) {
         listToRoute(e.children, child.children);
@@ -72,16 +71,16 @@ export const listToRoute = (list: IMenuConfigs[], routes: IRouteConfigs[]) => {
 };
 export const buildRouteNode = (config: Array<IRouteConfigs>): ReactNode[] => {
   let routes: ReactNode[] = [];
-  const { login } = store.getState().user;
   routes = config.map((e, index) => {
     const DynamicComponent = lazy(() => import(`@src/page/${e.component}`));
-    const path = e.redirect ? [e.redirect, e.path] : e.path;
+    const path = e.path;
     const attirbute: IRouteItemProps = {
       key: _.uniqueId('route_'),
       path: path,
       exact: e.exact,
       render: (props) => {
         // 验证登录 拦截
+        const { login } = store.getState().user;
         if (e.auth && login === false) {
           return <Redirect to="/login" />;
         }
@@ -104,6 +103,9 @@ export const buildRouteNode = (config: Array<IRouteConfigs>): ReactNode[] => {
       path={'*'}
       key={'404'}
       render={(prop) => {
+        if (prop.location.pathname === '/') {
+          return <Redirect to={config[0].path} />;
+        }
         return <Redirect to="/404" />;
       }}
     />

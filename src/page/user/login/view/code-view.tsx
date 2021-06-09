@@ -44,14 +44,7 @@ const CodeView = () => {
   };
   return (
     <div>
-      {error && (
-        <Alert
-          style={{ marginBottom: 24 }}
-          message={error.msg}
-          type="error"
-          closable
-        />
-      )}
+      {error && <Alert style={{ marginBottom: 24 }} message={error.msg} type="error" closable />}
       <Form
         size="large"
         name="basic"
@@ -100,9 +93,7 @@ const CodeView = () => {
           </Col>
           <Col>
             <Button loading={codeLoading} onClick={getCode}>
-              {countdown === 0
-                ? '获取验证码'
-                : `${Math.round(countdown / 1000)} 秒后重新获取`}
+              {countdown === 0 ? '获取验证码' : `${Math.round(countdown / 1000)} 秒后重新获取`}
             </Button>
           </Col>
         </Row>

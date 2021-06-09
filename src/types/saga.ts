@@ -17,10 +17,6 @@ type DecideReturn<T> = T extends Promise<infer R>
   ? StripEffects<T>
   : T;
 
-export type CallReturnType<T extends (...args: any[]) => any> = DecideReturn<
-  ReturnType<T>
->;
+export type CallReturnType<T extends (...args: any[]) => any> = DecideReturn<ReturnType<T>>;
 
-export type SagaReturnType<T extends (...args: any[]) => any> = StripEffects<
-  ReturnType<T>
->;
+export type SagaReturnType<T extends (...args: any[]) => any> = StripEffects<ReturnType<T>>;

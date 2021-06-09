@@ -81,10 +81,7 @@ const Object2SearchString = (queryParams: any): string => {
  * @param locationSearch url查询字符串
  * @param defaultValue 默认值，支持对象
  */
-const SearchString2Object = (
-  locationSearch: string,
-  defaultValue: any
-): any => {
+const SearchString2Object = (locationSearch: string, defaultValue: any): any => {
   let params = new URLSearchParams(locationSearch);
 
   let result: any = {};

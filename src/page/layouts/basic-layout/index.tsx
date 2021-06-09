@@ -42,12 +42,12 @@ const BasicLayout: FC<IBasicLayoutProps> = ({ menus, children }) => {
         const item = menu[index];
         const obj: IPathItemProps = {
           name: item.name,
-          path: item.path,
+          path: item.type === 0 ? item.path : undefined,
         };
         const breadcrumbs: IPathItemProps[] = [];
         if (parent) breadcrumbs.push(parent);
         breadcrumbs.push(obj);
-        if (item.path) {
+        if (item.type === 0 && item.path) {
           arr.push({
             breadcrumbs,
             name: item.name,
@@ -59,6 +59,7 @@ const BasicLayout: FC<IBasicLayoutProps> = ({ menus, children }) => {
         }
       }
     };
+
     tree2arr(menus);
     return arr;
   }, [menus]);
@@ -76,7 +77,7 @@ const BasicLayout: FC<IBasicLayoutProps> = ({ menus, children }) => {
       >
         <div className={`${PREFIX}-logo`}>
           <img
-            src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+            src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
             alt="头像"
           />
           {!collapsed && <span>{intl.get('platform_name')}</span>}
@@ -89,7 +90,7 @@ const BasicLayout: FC<IBasicLayoutProps> = ({ menus, children }) => {
         <Content className={`${PREFIX}-content`}>
           <FBreadcrumb breadcrumbs={currentPage?.breadcrumbs} />
           <div className={`${PREFIX}-content-main`}>
-            <FRouteView>{children}</FRouteView>
+            <FRouteView animation={true}>{children}</FRouteView>
           </div>
         </Content>
       </Layout>
@@ -108,13 +109,10 @@ const TriggerBtn = ({ collapsed, toggle }: ITriggerBtnProp) => {
       })}
     >
       <div className={`icon-bg`} onClick={toggle}>
-        {React.createElement(
-          collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
-          {
-            className: 'icon',
-            onClick: toggle,
-          }
-        )}
+        {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
+          className: 'icon',
+          onClick: toggle,
+        })}
       </div>
     </div>
   );
