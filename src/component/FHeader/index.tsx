@@ -7,7 +7,7 @@ import {
   ExclamationCircleOutlined,
   BellOutlined,
 } from '@ant-design/icons';
-import './index.less';
+import style from './index.module.scss';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '@src/redux/actions/user';
@@ -20,11 +20,11 @@ interface IFHeaderProps {
 const PREFIX = 'f-header';
 const FHeader = ({ title }: IFHeaderProps) => {
   const dispatch = useDispatch();
-  const { username } = useSelector((state: IRootState) => state.user);
+  const { userName } = useSelector((state: IRootState) => state.user);
   const history = useHistory();
   const menu = useMemo(
     () => (
-      <Menu className={`${PREFIX}-menu`}>
+      <Menu className={style[`${PREFIX}-menu`]}>
         {/* <Menu.Item
           className={`${PREFIX}-menu-item`}
           icon={<TeamOutlined className={`${PREFIX}-menu-item-icon`} />}
@@ -32,8 +32,8 @@ const FHeader = ({ title }: IFHeaderProps) => {
           <Link to="/account-center">用户中心</Link>
         </Menu.Item> */}
         <Menu.Item
-          className={`${PREFIX}-menu-item`}
-          icon={<LogoutOutlined className={`${PREFIX}-menu-item-icon`} />}
+          className={style[`${PREFIX}-menu-item`]}
+          icon={<LogoutOutlined className={style[`${PREFIX}-menu-item-icon`]} />}
           onClick={() => {
             Modal.confirm({
               title: '注销',
@@ -58,23 +58,23 @@ const FHeader = ({ title }: IFHeaderProps) => {
     [dispatch, history]
   );
   return (
-    <div className={PREFIX}>
+    <div className={style[PREFIX]}>
       <Row justify="space-between">
         <Col span={12}>
-          <h2 className={`${PREFIX}-title`}>{title}</h2>
+          <h2 className={style[`${PREFIX}-title`]}>{title}</h2>
         </Col>
         <Col span={12}>
-          <div className={`${PREFIX}-right`}>
-            <span className={`${PREFIX}-right-badge`}>
+          <div className={style[`${PREFIX}-right`]}>
+            <span className={style[`${PREFIX}-right-badge`]}>
               <Badge count={0}>
                 <BellOutlined style={{ fontSize: 16 }} />
               </Badge>
             </span>
 
             <Dropdown overlay={menu} arrow placement="bottomCenter">
-              <span className={`${PREFIX}-user`}>
+              <span className={style[`${PREFIX}-user`]}>
                 <Avatar icon={<UserOutlined />} />
-                <span className={`${PREFIX}-name`}>{username}</span>
+                <span className={style[`${PREFIX}-name`]}>{userName}</span>
               </span>
             </Dropdown>
           </div>

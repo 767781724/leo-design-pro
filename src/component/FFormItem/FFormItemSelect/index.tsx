@@ -1,5 +1,5 @@
 import HttpApi, { BaseHttpModel } from '@src/utils/https';
-import { Select } from 'antd';
+import { Select, SelectProps } from 'antd';
 import _ from 'lodash';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 type IgetData = <T>(val: T) => T;
@@ -22,14 +22,15 @@ interface IFFormItemSelectProps {
     [key: string]: any;
   };
   placeholder?: string;
+  selectState?: SelectProps<any>;
 }
 const FFormItemSelect = ({
   value,
   onChange,
   queryApi,
   params,
-  placeholder,
   options,
+  selectState,
 }: IFFormItemSelectProps) => {
   let isUnmount = useRef(false);
   const [data, setData] = useState<any>();
@@ -70,7 +71,7 @@ const FFormItemSelect = ({
     return null;
   }, [data, options]);
   return (
-    <Select value={value} onChange={onChange} allowClear>
+    <Select {...selectState} value={value} onChange={onChange} allowClear>
       {selectOptions}
     </Select>
   );

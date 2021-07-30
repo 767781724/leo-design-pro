@@ -1,6 +1,4 @@
-@prefix: f-header;
-
-.@{prefix}{
+.f-header {
   position: relative;
   width: 100%;
   height: 48px;
@@ -8,31 +6,30 @@
   line-height: 48px;
   background-color: #fff;
   box-shadow: 0 1px 4px rgb(0 21 41 / 8%);
-  &-right{
+  &-right {
     float: right;
-    &-badge{
+    &-badge {
       margin-right: 20px;
     }
   }
-  &-title{
+  &-title {
     margin-bottom: 0;
   }
-  &-user{
+  &-user {
     cursor: pointer;
   }
-  &-menu{
-    &-item{
+  &-menu {
+    &-item {
       width: 150px;
       font-size: 14px;
       padding: 5px 20px;
-      &-icon{
+      &-icon {
         font-size: 16px;
       }
     }
   }
-  &-name{
+  &-name {
     margin-left: 10px;
     font-size: 14px;
-
   }
 }

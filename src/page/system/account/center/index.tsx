@@ -1,9 +1,12 @@
+import { FPage } from '@src/component';
 import React from 'react';
-import './index.less';
-
-const PREFIX = 'account-center';
+import { Link } from 'react-router-dom';
 const LogPage = () => {
-  return <div className={PREFIX}>用户中心页面</div>;
+  return (
+    <FPage>
+      用户中心页面,前往<Link to="/center/setting">用户设置</Link>
+    </FPage>
+  );
 };
 
 export default LogPage;

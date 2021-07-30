@@ -1,14 +1,12 @@
-@prefix: login;
-
-.@{prefix}{
+.login {
   width: 100%;
   min-width: 1200px;
   height: 100%;
   overflow: hidden;
-  &-content{ 
+  &-content {
     width: 368px;
     margin: 110px auto;
-    h1{
+    h1 {
       font-size: 33px;
       margin-bottom: 0;
     }
@@ -21,7 +19,8 @@
     color: #999;
     margin: 12px 0 24px;
   }
-  .ant-tabs > .ant-tabs-nav .ant-tabs-nav-list, .ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-list{
+  .ant-tabs > .ant-tabs-nav .ant-tabs-nav-list,
+  .ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-list {
     flex: none;
   }
 }

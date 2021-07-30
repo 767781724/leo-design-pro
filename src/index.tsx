@@ -6,11 +6,10 @@ import { Provider } from 'react-redux';
 
 import store from '@src/redux/store';
 import HttpApi from '@src/utils/https';
-import './index.less';
+import './index.scss';
 
 switch (process.env.REACT_APP_ENV) {
   case 'local':
-    //mock数据
     HttpApi.baseURL = 'http://localhost:3000';
     break;
   case 'dev':

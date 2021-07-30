@@ -48,7 +48,7 @@
       {
         "id": "menu-account-center",
         "name": "用户中心",
-        "path": "/account/center",
+        "path": "/center",
         "auth": true,
         "component": "system/account/center",
         "type": 0,
@@ -59,9 +59,9 @@
       {
         "id": "menu-account-setting",
         "name": "用户设置",
-        "path": "/account/setting",
+        "path": "/center/setting",
         "auth": true,
-        "show": true,
+        "show": false,
         "component": "system/account/setting",
         "type": 0,
         "sort": 100

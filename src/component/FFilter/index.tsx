@@ -1,7 +1,7 @@
 import React, { ForwardedRef, forwardRef, useImperativeHandle, useMemo, useState } from 'react';
 import { Button, Col, Form, FormInstance, Row, Space } from 'antd';
 import { UpOutlined, DownOutlined } from '@ant-design/icons';
-import './index.less';
+import style from './index.module.scss';
 import { IFormItem } from '@src/types/baseTypes';
 
 const defSpan = 24 / 4;
@@ -77,7 +77,7 @@ const Filter = ({ items, onSearch }: IFFilterProps, ref: ForwardedRef<IFFilterRe
     <Form
       form={form}
       // labelCol={{ span: 6 }}
-      className={PREFIX}
+      className={style[PREFIX]}
       onFinish={onFinish}
     >
       <Row gutter={24}>

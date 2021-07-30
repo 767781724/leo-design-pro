@@ -5,7 +5,7 @@ import intl from 'react-intl-universal';
 import 'moment/locale/zh-cn';
 import zhCN from '@src/utils/locales/zh-CN';
 import AntdZhCN from 'antd/lib/locale/zh_CN';
-import './index.less';
+import style from './index.module.scss';
 
 interface IFIntlProviderProps {}
 const FIntlProvider: FC<IFIntlProviderProps> = ({ children }) => {
@@ -25,9 +25,9 @@ const FIntlProvider: FC<IFIntlProviderProps> = ({ children }) => {
   }, []);
   const suspenseSpin = useMemo(() => {
     return (
-      <div className="f-intl-spin">
+      <div className={style['f-intl-spin']}>
         <Spin>
-          <div className="f-intl-spin-content"></div>
+          <div className={style['f-intl-spin-content']}></div>
         </Spin>
       </div>
     );

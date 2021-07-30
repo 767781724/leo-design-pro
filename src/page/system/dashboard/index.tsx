@@ -1,15 +1,13 @@
+import { FPage } from '@src/component';
 import { Calendar, Card, Col, Row } from 'antd';
-import './index.less';
 import CardList from './view/card-list';
 import ColumnView from './view/column-view';
 import DynamicList from './view/dynamic-list';
 import ProjectList from './view/project-list';
 
-const PREFIX = 'dashboard';
-
 const DashboardPage = () => {
   return (
-    <div className={PREFIX}>
+    <FPage>
       <CardList />
       <Row gutter={15}>
         <Col xs={24} md={10}>
@@ -25,7 +23,7 @@ const DashboardPage = () => {
           <ColumnView />
         </Col>
       </Row>
-    </div>
+    </FPage>
   );
 };
 

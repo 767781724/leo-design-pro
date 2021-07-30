@@ -1,26 +1,19 @@
+import { ITableQueryParams, IPageRes, ITableViewProps, IFToolBarBtns } from '@src/types/baseTypes';
 import HttpApi, { BaseHttpModel } from '@src/utils/https';
 import { Alert } from 'antd';
 import _ from 'lodash';
-import React, {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useReducer,
-  useRef,
-} from 'react';
+import React, { useCallback, useEffect, useImperativeHandle, useReducer, useRef } from 'react';
 import FTable from '../FTable';
 import { TableViewReducer } from './reducer';
-import './index.less';
-import { IPageRes, ITableQueryParams, ITableViewProps, ITableViewRef } from '@src/types/baseTypes';
+import styles from './index.module.scss';
+import { FToolBar } from '..';
 /**
  * @author Leo
  * @desc table表格view 封装分页请求等
  * @date 2021-04-02 16:57:04
  */
 const PREFIX = 'f-table-view';
-
-const FTableView = forwardRef<ITableViewRef, ITableViewProps>((props, ref) => {
+const FTableView = <T extends object = any>(props: ITableViewProps<T>) => {
   const queryParams = useRef<ITableQueryParams>({
     page: 1,
     size: 10,
@@ -44,6 +37,9 @@ const FTableView = forwardRef<ITableViewRef, ITableViewProps>((props, ref) => {
   const onPageShowSizeChange = (page: number, pageSize: number) => {
     onPageChange(1, pageSize);
   };
+  // const handleTableChange: IFTableProps['onChange'] = (val) => {
+  //   console.log(val);
+  // };
   // 状态
   const [state, dispatch] = useReducer(
     TableViewReducer,
@@ -56,42 +52,40 @@ const FTableView = forwardRef<ITableViewRef, ITableViewProps>((props, ref) => {
         showQuickJumper: true,
         showSizeChanger: true,
         pageSizeOptions: ['5', '10', '20', '40', '60', '100', '150', '200'],
+        onChange: onPageChange,
+        onShowSizeChange: onPageShowSizeChange,
       },
       dataSource: [],
       tableProps: {},
     },
     (e) => {
-      if (e.pagination) {
-        e.pagination.onChange = onPageChange;
-        e.pagination.onShowSizeChange = onPageShowSizeChange;
-      }
       // 添加选择
-      if (props.selector) {
-        e.tableProps.rowSelection = {
+      if (props.rightNode || props.leftNode) {
+        e.rowSelection = {
           onChange: (selectedRowKeys, selectedRows) => {
-            let tableProps = state.tableProps;
-            if (tableProps && tableProps.rowSelection) {
-              tableProps.rowSelection.selectedRowKeys = selectedRowKeys;
+            if (state.rowSelection) {
+              state.rowSelection.selectedRowKeys = selectedRowKeys;
             }
-            dispatch({ selectedRowKeys, selectedRows, tableProps });
+            dispatch({
+              selectedRowKeys,
+              selectedRows,
+              rowSelection: state.rowSelection,
+            });
           },
         };
       }
-
-      return _.assign({}, e, props);
+      return e;
     }
   );
   // 数据查询
   const query = useCallback(() => {
-    let tableProps = state.tableProps;
-    if (
-      tableProps &&
-      tableProps.rowSelection &&
-      state.selectedRowKeys &&
-      state.selectedRowKeys.length > 0
-    ) {
-      tableProps.rowSelection.selectedRowKeys = [];
-      dispatch({ tableProps, selectedRows: [], selectedRowKeys: [] });
+    if (state.rowSelection && state.selectedRowKeys && state.selectedRowKeys.length > 0) {
+      state.rowSelection.selectedRowKeys = [];
+      dispatch({
+        rowSelection: state.rowSelection,
+        selectedRows: [],
+        selectedRowKeys: [],
+      });
     }
     dispatch({ querying: true });
     const getQueryParams = () => {
@@ -121,15 +115,16 @@ const FTableView = forwardRef<ITableViewRef, ITableViewProps>((props, ref) => {
     }
     promise
       .then((res) => {
-        let pagination = state.pagination;
-        if (pagination) {
-          pagination.current = res.data.pageNum;
-          pagination.pageSize = res.data.pageSize;
-          pagination.total = res.data.totalPages * 1;
-        }
         dispatch({
           dataSource: state.pagination === false ? res.data : res.data.content,
-          pagination,
+          pagination: state.pagination
+            ? {
+                ...state.pagination,
+                current: res.data.pageNum,
+                pageSize: res.data.pageSize,
+                total: res.data.totalElements,
+              }
+            : false,
           querying: false,
         });
       })
@@ -145,28 +140,44 @@ const FTableView = forwardRef<ITableViewRef, ITableViewProps>((props, ref) => {
     queryParams.current = _.assign({}, queryParams.current, e);
   };
 
-  const getSelectedRowKeys = useCallback(() => {
-    return state.selectedRowKeys || [];
-  }, [state.selectedRowKeys]);
-  const getSelectedRows = useCallback(() => {
-    return state.selectedRows || [];
-  }, [state.selectedRows]);
   useImperativeHandle(
-    ref,
+    props.innerRef,
     () => ({
       query,
-      getSelectedRowKeys: getSelectedRowKeys,
-      getSelectedRows: getSelectedRows,
       queryParams: queryParams.current,
       setQueryParams,
     }),
-    [query, getSelectedRowKeys, getSelectedRows]
+    [query]
   );
+  const buildToolbarBtns = useCallback(
+    (btns?: IFToolBarBtns) => {
+      if (Array.isArray(btns) && btns.length > 0) {
+        let nodes = [];
+        for (const btn of btns) {
+          let Btn: any = null;
+          if (_.isFunction(btn)) {
+            Btn = btn(state.selectedRowKeys || [], state.selectedRows || []);
+          } else {
+            Btn = btn;
+          }
+          nodes.push(React.cloneElement(Btn, { key: _.uniqueId('btn_') }));
+        }
+        return nodes;
+      }
+      return null;
+    },
+    [state.selectedRowKeys, state.selectedRows]
+  );
+
   return (
-    <div>
+    <>
+      <FToolBar
+        leftNode={buildToolbarBtns(props.leftNode)}
+        rightNode={buildToolbarBtns(props.rightNode)}
+      />
       {state.selectedRowKeys && state.selectedRowKeys.length > 0 && (
         <Alert
-          className={`${PREFIX}-alert`}
+          className={styles[`${PREFIX}-alert`]}
           message={
             <span>
               已选择<strong>{state.selectedRowKeys.length}</strong>项
@@ -175,18 +186,18 @@ const FTableView = forwardRef<ITableViewRef, ITableViewProps>((props, ref) => {
           type="info"
         />
       )}
-      <FTable
+      <FTable<T>
         loading={state.querying}
-        rowKey={props.rowKey}
-        columns={props.columns}
         size={'small'}
         dataSource={state.dataSource}
         pagination={state.pagination}
-        {...state.tableProps}
+        rowSelection={state.rowSelection}
+        // onChange={handleTableChange}
+        {...props.tableProps}
       />
-    </div>
+    </>
   );
-});
+};
 FTableView.defaultProps = {
   firstQuery: true,
 };

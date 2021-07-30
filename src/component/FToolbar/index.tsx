@@ -1,31 +1,22 @@
-import { IBtnsProp, IFToolBarProps } from '@src/types/baseTypes';
 import { Col, Row } from 'antd';
-import _ from 'lodash';
-import React, { useCallback } from 'react';
-import './index.less';
+import styles from './index.module.scss';
+import { ReactNode } from 'react';
 
 const PREFIX = 'f-toolbar';
 
-const FToolBar = ({ leftNode, rightNode }: IFToolBarProps) => {
-  const buildToolbarBtns = useCallback((btns?: IBtnsProp) => {
-    if (Array.isArray(btns) && btns.length > 0) {
-      let nodes = [];
-      for (const btn of btns) {
-        let Btn: any = btn;
-        nodes.push(React.cloneElement(Btn, { key: _.uniqueId('btn_') }));
-      }
-      return nodes;
-    }
-    return null;
-  }, []);
+interface IFToolBarProp {
+  leftNode: ReactNode;
+  rightNode: ReactNode;
+}
+const FToolBar = ({ leftNode, rightNode }: IFToolBarProp) => {
   if (!leftNode && !rightNode) return null;
   return (
-    <Row className={PREFIX}>
-      <Col className={`${PREFIX}-left`} span={12}>
-        {buildToolbarBtns(leftNode)}
+    <Row className={styles[PREFIX]}>
+      <Col className={styles[`${PREFIX}-left`]} span={12}>
+        {leftNode}
       </Col>
-      <Col className={`${PREFIX}-right`} span={12}>
-        {buildToolbarBtns(rightNode)}
+      <Col className={styles[`${PREFIX}-right`]} span={12}>
+        {rightNode}
       </Col>
     </Row>
   );

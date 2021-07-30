@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import './App.less';
+import './App.scss';
 import { generatorDynamicRouter } from './router/route-tool';
 import { useSelector } from 'react-redux';
 import { IRootState } from './redux/reducers/index';

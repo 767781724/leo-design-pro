@@ -23,5 +23,4 @@ export const initialState: ITableViewState = {
     pageSizeOptions: ['5', '10', '20', '40', '60', '100', '150', '200'],
   },
   dataSource: [],
-  tableProps: {},
 };

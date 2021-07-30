@@ -8,7 +8,7 @@ import store from '@src/redux/store';
 const constantsRoutes: Array<IRouteConfigs> = [
   {
     path: '/login',
-    component: 'user/login/index.tsx',
+    component: 'system/login/index.tsx',
     exact: true,
     auth: false,
   },

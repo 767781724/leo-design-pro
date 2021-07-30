@@ -1,7 +1,7 @@
 import { Layout } from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
-import React, { FC, useMemo, useState } from 'react';
-import './index.less';
+import React, { FC, useState } from 'react';
+import styles from './index.module.scss';
 import classNames from 'classnames';
 import { FBreadcrumb, FHeader, FMenu, FRouteView } from '@src/component';
 import { connect } from 'react-redux';
@@ -19,12 +19,46 @@ type IPathItemProps = {
   path?: string;
   name: string;
 };
-type IPathProps = {
-  breadcrumbs: IPathItemProps[];
-  name: string;
-  path: string;
+// 将menu列表转成path对应的一维数组
+const flattenRoutes = (arr: IMenuConfigs[]): IPathItemProps[] =>
+  arr.reduce(function (prev: IPathItemProps[], item) {
+    prev.push({ name: item.name, path: item.path || '/' });
+    return prev.concat(Array.isArray(item.children) ? flattenRoutes(item.children) : []);
+  }, []);
+const getBreadcrumb = (
+  flattenRoutes: IPathItemProps[],
+  curSection: string,
+  pathSection: string
+) => {
+  const matchRoute = flattenRoutes.find((ele) => {
+    const { path } = ele;
+    return pathSection === path;
+  });
+  // 返回breadcrumb的值，没有就返回原匹配子路径名
+  if (matchRoute) {
+    return matchRoute;
+  } else {
+    return {
+      name: pathSection === '/' ? '首页' : curSection,
+      path: pathSection,
+    };
+  }
 };
+const getBreadcrumbs = (flattenRoutes: IPathItemProps[], pathname: string) => {
+  // 初始化匹配数组match
+  let matches: any[] = [];
+  pathname.split('/').reduce((prev, curSection) => {
+    // 将最后一个路由部分与当前部分合并，比如当路径为 `/x/xx/xxx` 时，pathSection分别检查 `/x` `/x/xx` `/x/xx/xxx` 的匹配，并分别生成面包屑
+    const pathSection = `${prev}/${curSection}`;
+    if (!!curSection) {
+      const breadcrumb = getBreadcrumb(flattenRoutes, curSection, pathSection);
+      matches.push(breadcrumb);
+    }
 
+    return pathSection;
+  });
+  return matches;
+};
 const BasicLayout: FC<IBasicLayoutProps> = ({ menus, children }) => {
   const [collapsed, setCollapsed] = useState(false);
   const toggle = () => {
@@ -34,48 +68,22 @@ const BasicLayout: FC<IBasicLayoutProps> = ({ menus, children }) => {
     setCollapsed(broken);
   };
   const location = useLocation();
-  // 将menu列表转成path对应的一维数组
-  const pathAndName = useMemo(() => {
-    const arr: IPathProps[] = [];
-    const tree2arr = (menu: IMenuConfigs[], parent?: IPathItemProps) => {
-      for (let index = 0; index < menu.length; index++) {
-        const item = menu[index];
-        const obj: IPathItemProps = {
-          name: item.name,
-          path: item.type === 0 ? item.path : undefined,
-        };
-        const breadcrumbs: IPathItemProps[] = [];
-        if (parent) breadcrumbs.push(parent);
-        breadcrumbs.push(obj);
-        if (item.type === 0 && item.path) {
-          arr.push({
-            breadcrumbs,
-            name: item.name,
-            path: item.path,
-          });
-        }
-        if (item.children) {
-          tree2arr(item.children, obj);
-        }
-      }
-    };
 
-    tree2arr(menus);
-    return arr;
-  }, [menus]);
-  const currentPage = pathAndName.find((e) => e.path === location.pathname);
+  const breadcrumbs = getBreadcrumbs(flattenRoutes(menus), location.pathname);
+  const currentPage = breadcrumbs[breadcrumbs.length - 1];
+
   return (
-    <Layout className={PREFIX}>
+    <Layout className={styles[PREFIX]}>
       <Sider
         width={240}
         breakpoint="lg"
-        className={`${PREFIX}-sider`}
+        className={styles[`${PREFIX}-sider`]}
         trigger={null}
         collapsible
         collapsed={collapsed}
         onBreakpoint={breakPoint}
       >
-        <div className={`${PREFIX}-logo`}>
+        <div className={styles[`${PREFIX}-logo`]}>
           <img
             src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
             alt="头像"
@@ -87,9 +95,9 @@ const BasicLayout: FC<IBasicLayoutProps> = ({ menus, children }) => {
       </Sider>
       <Layout>
         <FHeader title={currentPage?.name} />
-        <Content className={`${PREFIX}-content`}>
-          <FBreadcrumb breadcrumbs={currentPage?.breadcrumbs} />
-          <div className={`${PREFIX}-content-main`}>
+        <Content className={styles[`${PREFIX}-content`]}>
+          <FBreadcrumb breadcrumbs={breadcrumbs} />
+          <div className={styles[`${PREFIX}-content-main`]}>
             <FRouteView animation={true}>{children}</FRouteView>
           </div>
         </Content>
@@ -104,13 +112,13 @@ type ITriggerBtnProp = {
 const TriggerBtn = ({ collapsed, toggle }: ITriggerBtnProp) => {
   return (
     <div
-      className={classNames(`${PREFIX}-trigger`, {
-        collapse: collapsed,
+      className={classNames(styles[`${PREFIX}-trigger`], {
+        [styles['collapse']]: collapsed,
       })}
     >
-      <div className={`icon-bg`} onClick={toggle}>
+      <div className={styles['icon-bg']} onClick={toggle}>
         {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-          className: 'icon',
+          className: styles['icon'],
           onClick: toggle,
         })}
       </div>

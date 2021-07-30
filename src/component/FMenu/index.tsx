@@ -10,7 +10,7 @@ import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { IMenuConfigs } from '@src/types/system';
 import _ from 'lodash';
-import './index.less';
+import style from './index.module.scss';
 import { useHistory, useLocation } from 'react-router';
 import { FIconFont } from '..';
 
@@ -106,7 +106,7 @@ const FMenu = ({ menuList }: IFMenuProps) => {
     setOpenKeys(keys);
   };
   return (
-    <div className={PREFIX}>
+    <div className={style[PREFIX]}>
       <Menu
         selectedKeys={selectKey}
         openKeys={openKeys}
@@ -128,7 +128,7 @@ function BuildMenu(items: IMenuConfigs[]) {
   }
   let nodes = [];
   for (const item of items) {
-    // if (!item.show) continue;
+    if (!item.show) continue;
     if (item.children && item.children.length > 0) {
       nodes.push(
         <SubMenu key={item.id} title={BuildMenuTitle(item)}>
@@ -149,12 +149,12 @@ function BuildMenuTitle(menu: IMenuConfigs): ReactNode {
       icon = <FIconFont type={menu.icon} style={{ fontSize: 20 }} />;
     }
   } else {
-    icon = <i className="def-icon">·</i>;
+    icon = <i className={style['def-icon']}>·</i>;
   }
   return (
     <React.Fragment>
       {icon}
-      <span className="name">{menu.name}</span>
+      <span className={style['name']}>{menu.name}</span>
     </React.Fragment>
   );
 }

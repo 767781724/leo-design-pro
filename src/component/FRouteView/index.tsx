@@ -2,7 +2,7 @@ import { Spin } from 'antd';
 import React, { FC, Suspense, useMemo } from 'react';
 import { Switch, useLocation } from 'react-router-dom';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import './index.less';
+import styles from './index.module.scss';
 
 const PREFIX = 'f-route';
 type IFRouteViewProps = {
@@ -12,25 +12,25 @@ const FRouteView: FC<IFRouteViewProps> = ({ children, animation = false }) => {
   let location = useLocation();
   const suspenseSpin = useMemo(() => {
     return (
-      <div className="spin">
+      <div className={styles['spin']}>
         <Spin>
-          <div className="spin-content"></div>
+          <div className={styles['spin-content']}></div>
         </Spin>
       </div>
     );
   }, []);
   if (!animation)
     return (
-      <div className={PREFIX}>
+      <div className={styles[PREFIX]}>
         <Suspense fallback={suspenseSpin}>
           <Switch location={location}>{children}</Switch>
         </Suspense>
       </div>
     );
   return (
-    <div className={PREFIX}>
-      <TransitionGroup className={`${PREFIX}-wrapper`}>
-        <CSSTransition key={location.pathname} timeout={200} classNames={'fade'}>
+    <div className={styles[PREFIX]}>
+      <TransitionGroup className={styles[`${PREFIX}-wrapper`]}>
+        <CSSTransition key={location.pathname} timeout={200} classNames={styles['fade']}>
           <Suspense fallback={suspenseSpin}>
             <Switch location={location}>{children}</Switch>
           </Suspense>

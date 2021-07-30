@@ -1,6 +1,6 @@
 import { Input } from 'antd';
 import { ChangeEvent, useState } from 'react';
-import './index.less';
+import style from './index.module.scss';
 
 const PREFIX = 'f-form-item-range-input';
 type IRangeInputValue = [number | undefined, number | undefined];
@@ -30,20 +30,20 @@ const FFormItemRangeInput = ({
   };
 
   return (
-    <span className={PREFIX}>
+    <span className={style[PREFIX]}>
       <Input
         type="number"
-        className={`${PREFIX}-left`}
+        className={style[`${PREFIX}-left`]}
         placeholder={placeholder && placeholder[0]}
         onChange={_onChange.bind(this, 0)}
         value={(value && value[0]) || min}
         onBlur={onBlur}
         onPressEnter={onPressEnter}
       />
-      <span className={`${PREFIX}-center`}>~</span>
+      <span className={style[`${PREFIX}-center`]}>~</span>
       <Input
         type="number"
-        className={`${PREFIX}-right`}
+        className={style[`${PREFIX}-right`]}
         placeholder={placeholder && placeholder[1]}
         onChange={_onChange.bind(this, 1)}
         onBlur={onBlur}

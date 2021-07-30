@@ -1,13 +1,11 @@
 import { FBaseListPage, FFormItemRangePicker } from '@src/component';
 import React from 'react';
-import './index.less';
 import { Input, Select } from 'antd';
 
 const LogPage = () => {
   return (
     <FBaseListPage
       queryApi="/log/list"
-      rowKey="id"
       conditions={[
         {
           id: 'id1',
@@ -35,24 +33,27 @@ const LogPage = () => {
           _node: <FFormItemRangePicker />,
         },
       ]}
-      columns={[
-        {
-          title: 'name0',
-          dataIndex: 'name0',
-        },
-        {
-          title: 'name1',
-          dataIndex: 'name1',
-        },
-        {
-          title: 'name2',
-          dataIndex: 'name2',
-        },
-        {
-          title: 'name3',
-          dataIndex: 'name3',
-        },
-      ]}
+      tableProps={{
+        rowKey: 'id',
+        columns: [
+          {
+            title: 'name0',
+            dataIndex: 'name0',
+          },
+          {
+            title: 'name1',
+            dataIndex: 'name1',
+          },
+          {
+            title: 'name2',
+            dataIndex: 'name2',
+          },
+          {
+            title: 'name3',
+            dataIndex: 'name3',
+          },
+        ],
+      }}
     ></FBaseListPage>
   );
 };

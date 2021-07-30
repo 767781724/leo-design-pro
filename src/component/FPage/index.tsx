@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import classNames from 'classnames';
-import './index.less';
+import styles from './index.module.scss';
 /**
  *
  * @author Leo
@@ -15,7 +15,7 @@ interface IFPageProp {
 const PREFIX = 'f-page';
 const FPage: FC<IFPageProp> = ({ className, style, children }) => {
   return (
-    <div style={style} className={classNames(PREFIX, className)}>
+    <div style={style} className={classNames(styles[PREFIX], className)}>
       {children}
     </div>
   );

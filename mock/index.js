@@ -23,7 +23,7 @@ const proxy = {
         msg: '',
         data: {
           id: Random.integer(10000),
-          username: 'admin',
+          userName: 'admin',
           password: '123456',
         },
       });

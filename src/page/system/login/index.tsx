@@ -1,6 +1,6 @@
 import { Row, Col, Tabs } from 'antd';
 
-import './index.less';
+import styles from './index.module.scss';
 import intl from 'react-intl-universal';
 import PasswordView from './view/password-view';
 import CodeView from './view/code-view';
@@ -9,8 +9,8 @@ const PREFIX = 'login';
 const { TabPane } = Tabs;
 const LoginPage = () => {
   return (
-    <div className={PREFIX}>
-      <div className={`${PREFIX}-content`}>
+    <div className={styles[PREFIX]}>
+      <div className={styles[`${PREFIX}-content`]}>
         <Row align="middle" justify="center">
           <Col>
             <img src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" alt="" />
@@ -19,7 +19,7 @@ const LoginPage = () => {
             <h1>{intl.get('platform_name')}</h1>
           </Col>
         </Row>
-        <Row className={`${PREFIX}-description`} justify="center">
+        <Row className={styles[`${PREFIX}-description`]} justify="center">
           {intl.get('platform_slogan')}
         </Row>
         <Tabs defaultActiveKey="1" centered>

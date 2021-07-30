@@ -1,24 +1,19 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
-import { FFilter, FPage, FToolBar, FTableView } from '..';
+import React, { useEffect, useImperativeHandle, useRef } from 'react';
+import { FFilter, FPage, FTableView } from '..';
 import { IFFilterRef } from '../FFilter';
+import { IBaseListPageProps, ITableQueryParams, ITableViewRef } from '@src/types/baseTypes';
 import { Object2SearchString, SearchString2Object } from '@src/utils/router';
 import _ from 'lodash';
 import { useLocation } from 'react-router-dom';
-import './index.less';
-import {
-  IBaseListPageProps,
-  IBaseListPageRef,
-  ITableQueryParams,
-  ITableViewRef,
-} from '@src/types/baseTypes';
+import style from './index.module.scss';
 
 const PREFIX = 'f-list-page';
 
-const FBaseListPage = forwardRef<IBaseListPageRef, IBaseListPageProps>((props, ref) => {
+const FBaseListPage = <T extends object = any>(props: IBaseListPageProps<T>) => {
   const location = useLocation();
   const filter = useRef<IFFilterRef>(null);
-  const table = useRef<ITableViewRef>(null);
-  const { leftNode, rightNode, conditions, tableProps, ...rProps } = props;
+  const tableRef = useRef<ITableViewRef>(null);
+  const { conditions, innerRef, children, ...rProps } = props;
   const queryParams = useRef<ITableQueryParams>({
     page: 1,
     size: 10,
@@ -26,11 +21,11 @@ const FBaseListPage = forwardRef<IBaseListPageRef, IBaseListPageProps>((props, r
     conditions: {},
   });
   const pushQueryParams = (params: Partial<ITableQueryParams>) => {
-    queryParams.current = _.extend({}, table.current?.queryParams, params);
+    queryParams.current = _.extend({}, tableRef.current?.queryParams, params);
     // 修改table组件查询条件
-    table.current?.setQueryParams(queryParams.current);
+    tableRef.current?.setQueryParams(queryParams.current);
     // 调用查询接口
-    table.current?.query();
+    tableRef.current?.query();
     // 将查询数据添加到url
     window.history.pushState(
       null,
@@ -47,21 +42,12 @@ const FBaseListPage = forwardRef<IBaseListPageRef, IBaseListPageProps>((props, r
     };
     pushQueryParams(p);
   };
-  const _query = () => {
-    table.current?.query();
-  };
-  const getSelectedRowKeys = () => {
-    return table.current?.getSelectedRowKeys() ?? [];
-  };
-  const getSelectedRows = () => {
-    return table.current?.getSelectedRows() ?? [];
-  };
   useImperativeHandle(
-    ref,
+    innerRef,
     () => ({
-      query: _query,
-      getSelectedRowKeys: getSelectedRowKeys,
-      getSelectedRows: getSelectedRows,
+      query: () => {
+        tableRef.current?.query();
+      },
     }),
     []
   );
@@ -71,16 +57,16 @@ const FBaseListPage = forwardRef<IBaseListPageRef, IBaseListPageProps>((props, r
       queryParams.current.conditions = filter.current.form.getFieldsValue();
       queryParams.current = SearchString2Object(location.search, queryParams.current);
       filter.current.form.setFieldsValue(queryParams.current.conditions);
-      table.current?.setQueryParams(queryParams.current);
+      tableRef.current?.setQueryParams(queryParams.current);
     }
-    if (table.current) {
-      table.current.query();
+    if (tableRef.current) {
+      tableRef.current.query();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const onPageChange = (e: ITableQueryParams) => {
-    queryParams.current = _.extend({}, table.current?.queryParams, e);
+    queryParams.current = _.extend({}, tableRef.current?.queryParams, e);
     // 将查询数据添加到url
     window.history.pushState(
       null,
@@ -89,25 +75,19 @@ const FBaseListPage = forwardRef<IBaseListPageRef, IBaseListPageProps>((props, r
     );
   };
   return (
-    <div className={PREFIX}>
+    <div className={style[PREFIX]}>
       <FPage>
         <FFilter ref={filter} onSearch={handleSearch} items={conditions} />
-        <FToolBar leftNode={leftNode} rightNode={rightNode} />
         <FTableView
-          ref={table}
-          tableProps={{
-            bordered: true,
-            ...tableProps,
-          }}
+          innerRef={tableRef}
           {...rProps}
-          selector={rightNode && rightNode.length > 0}
           firstQuery={false}
           onPageChange={onPageChange}
         />
+        {props.children}
       </FPage>
-      {props.children}
     </div>
   );
-});
+};
 
 export default FBaseListPage;

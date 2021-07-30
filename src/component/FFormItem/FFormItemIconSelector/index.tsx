@@ -2,7 +2,7 @@ import { Input, Modal } from 'antd';
 import React, { useState } from 'react';
 import { FIconFont } from '../../';
 import icons from './icons';
-import './index.less';
+import style from './index.module.scss';
 import { SettingOutlined } from '@ant-design/icons';
 
 interface IFIconSelectorProps {
@@ -12,7 +12,7 @@ const PREFIX = 'f-icon-selector';
 
 const FIconSelector = ({ onSelect }: IFIconSelectorProps) => {
   return (
-    <ul className={PREFIX}>
+    <ul className={style[PREFIX]}>
       {icons.map((val, index) => (
         <li key={val} onClick={() => onSelect(val)}>
           <FIconFont type={val} />
