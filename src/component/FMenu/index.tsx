@@ -7,12 +7,11 @@
 
 import { Menu } from 'antd';
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
-
-import { IMenuConfigs } from '@src/types/system';
 import _ from 'lodash';
 import style from './index.module.scss';
 import { useHistory, useLocation } from 'react-router';
 import { FIconFont } from '..';
+import { IMenuConfigs } from '@src/types/model/menu';
 
 const { SubMenu } = Menu;
 
@@ -44,6 +43,7 @@ const FMenu = ({ menuList }: IFMenuProps) => {
           return (arr = []);
         }
         for (let i = 0; i < menus.length; i++) {
+          console.log(menus[i]);
           arr.push(menus[i].id.toString());
           if (
             menus[i].path === path ||

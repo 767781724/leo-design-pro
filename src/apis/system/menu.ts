@@ -1,4 +1,3 @@
-import { IMenuConfigs } from '@src/types/system';
 import HttpApi from '@src/utils/https';
 
 /**
@@ -8,9 +7,10 @@ import HttpApi from '@src/utils/https';
  * @param {username,password}
  * @date 2021-03-29 16:35:07
  */
-export function getMenuList() {
-  return HttpApi.request<IMenuConfigs[]>({
+export function getMenuTree(header?: { token: string }) {
+  return HttpApi.request({
     url: '/menu/tree',
     method: 'GET',
+    headers: header,
   });
 }

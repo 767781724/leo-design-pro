@@ -5,10 +5,10 @@ import styles from './index.module.scss';
 import classNames from 'classnames';
 import { FBreadcrumb, FHeader, FMenu, FRouteView } from '@src/component';
 import { connect } from 'react-redux';
-import { IRootState } from '../../../redux/reducers/index';
 import { useLocation } from 'react-router-dom';
-import { IMenuConfigs } from '@src/types/system';
 import intl from 'react-intl-universal';
+import { RootState } from '@src/store';
+import { IMenuConfigs } from '@src/types/model/menu';
 
 const { Sider, Content } = Layout;
 
@@ -125,7 +125,7 @@ const TriggerBtn = ({ collapsed, toggle }: ITriggerBtnProp) => {
     </div>
   );
 };
-const mapStateToProps = (state: IRootState) => {
+const mapStateToProps = (state: RootState) => {
   return { menus: state.user.menus };
 };
 export default connect(mapStateToProps)(BasicLayout);

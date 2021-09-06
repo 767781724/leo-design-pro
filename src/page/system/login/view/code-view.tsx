@@ -1,29 +1,36 @@
-import { getUserData } from '@src/redux/actions/user';
-import { IRootState } from '@src/redux/reducers';
 import { Alert, Form, Input, Checkbox, Button, Row, Col } from 'antd';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { MobileTwoTone, MailTwoTone } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { useCountDown } from 'ahooks';
 import { getLoginCode } from '@src/apis/system/user';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocalStorage } from './hook';
+import { RootState } from '@src/store';
+import { useHistory } from 'react-router';
 
 const CodeView = () => {
-  const { loading, error } = useSelector((state: IRootState) => state.user);
-  const dispatch = useDispatch();
+  const { isLogin } = useSelector((state: RootState) => state.user);
+  // const dispatch = useDispatch();
   const [countdown, setTarget] = useCountDown();
   const [codeLoading, setCodeLoading] = useState(false);
+  const [error] = useState();
+  const [loading] = useState(false);
   const [form] = Form.useForm();
+  const history = useHistory();
   const [tel, setTel, removeTel] = useLocalStorage('USER_TEL');
+
+  useEffect(() => {
+    if (isLogin) history.push('/');
+  }, [isLogin, history]);
   const onFinish = (values: any) => {
-    const { account, verifyCode, remember } = values;
+    const { account, remember } = values;
     if (remember) {
       setTel(account);
     } else {
       removeTel();
     }
-    dispatch(getUserData({ account, verifyCode }));
+    // dispatch(getUserData({ account, verifyCode }));
   };
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
@@ -44,7 +51,7 @@ const CodeView = () => {
   };
   return (
     <div>
-      {error && <Alert style={{ marginBottom: 24 }} message={error.msg} type="error" closable />}
+      {error && <Alert style={{ marginBottom: 24 }} message={error} type="error" closable />}
       <Form
         size="large"
         name="basic"

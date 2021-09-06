@@ -3,12 +3,15 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
-
-import store from '@src/redux/store';
 import HttpApi from '@src/utils/https';
 import './index.scss';
+import store from './store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistStore } from 'redux-persist';
 
 switch (process.env.REACT_APP_ENV) {
+  case 'mock':
+    break;
   case 'local':
     HttpApi.baseURL = 'http://localhost:3000';
     break;
@@ -23,7 +26,9 @@ switch (process.env.REACT_APP_ENV) {
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <PersistGate loading={null} persistor={persistStore(store)}>
+      <App />
+    </PersistGate>
   </Provider>,
   document.getElementById('root')
 );

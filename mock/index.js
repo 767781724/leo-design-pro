@@ -15,16 +15,16 @@ const listFormat = (req, json) => {
   };
 };
 const proxy = {
-  'POST /passport/login': (req, res) => {
-    const { account, password, verifyCode } = req.body;
-    if ((account === 'admin' && password === '123456') || verifyCode === '1234') {
+  'POST /api/login': (req, res) => {
+    const { workNo, password, verifyCode } = req.body;
+    if ((workNo === 'admin' && password === '123456') || verifyCode === '1234') {
       return res.send({
         code: 200,
         msg: '',
         data: {
-          id: Random.integer(10000),
           userName: 'admin',
-          password: '123456',
+          userId: '001',
+          token: Random.integer(10000),
         },
       });
     } else {

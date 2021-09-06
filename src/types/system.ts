@@ -6,12 +6,3 @@ export interface IRouteConfigs {
   children?: IRouteConfigs[];
   redirect?: string;
 }
-export interface IMenuConfigs extends Partial<Omit<IRouteConfigs, 'children'>> {
-  id: number | string;
-  icon: string;
-  name: string;
-  type: number;
-  sort: number;
-  children?: IMenuConfigs[];
-  show: boolean;
-}

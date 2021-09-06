@@ -1,32 +1,31 @@
 import { Button, Form, Input, Modal, ModalProps, Row, Space, TreeSelect } from 'antd';
 import intl from 'react-intl-universal';
 import React, { useEffect, useState } from 'react';
-import { getMenuList } from '@src/apis/system/menu';
-import { IMenuConfigs } from '@src/types/system';
+import { IMenuConfigs } from '@src/types/model/menu';
 interface IAddFormProps extends ModalProps {
   visible: boolean;
 }
 
-const treeFormat = (arr: IMenuConfigs[]) => {
-  return arr.map((val) => {
-    const obj: any = {
-      title: val.name,
-      value: val.id,
-      key: val.id,
-    };
-    if (val.children) {
-      obj['children'] = treeFormat(val.children);
-    }
-    return obj;
-  });
-};
+// const treeFormat = (arr: IMenuConfigs[]) => {
+//   return arr.map((val) => {
+//     const obj: any = {
+//       title: val.name,
+//       value: val.id,
+//       key: val.id,
+//     };
+//     if (val.children) {
+//       obj['children'] = treeFormat(val.children);
+//     }
+//     return obj;
+//   });
+// };
 const AddForm = (props: IAddFormProps) => {
-  const [menuList, setMenuList] = useState<IMenuConfigs[]>([]);
+  const [menuList] = useState<IMenuConfigs[]>([]); //setMenuList
   useEffect(() => {
-    getMenuList().then((res) => {
-      console.log(treeFormat(res.data));
-      setMenuList(treeFormat(res.data));
-    });
+    // getMenuList().then((res) => {
+    //   console.log(treeFormat(res.data));
+    //   setMenuList(treeFormat(res.data));
+    // });
   }, []);
   const onFinish = (values: any) => {
     console.log('Success:', values);

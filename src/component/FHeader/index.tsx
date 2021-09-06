@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Avatar, Badge, Col, Dropdown, Menu, Modal, Row } from 'antd';
 import {
   UserOutlined,
@@ -10,9 +10,10 @@ import {
 import style from './index.module.scss';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '@src/redux/actions/user';
-import { IRootState } from '../../redux/reducers/index';
 import { setLogout } from '@src/apis/system/user';
+import { useInterval } from 'ahooks';
+import { signOut } from '@src/store/user';
+import { RootState } from '@src/store';
 
 interface IFHeaderProps {
   title?: string;
@@ -20,8 +21,12 @@ interface IFHeaderProps {
 const PREFIX = 'f-header';
 const FHeader = ({ title }: IFHeaderProps) => {
   const dispatch = useDispatch();
-  const { userName } = useSelector((state: IRootState) => state.user);
+  const { info, infoNum } = useSelector((state: RootState) => state.user);
+
   const history = useHistory();
+  const [interval] = useState(1000 * 60 * 30);
+
+  useInterval(() => {}, interval, { immediate: true });
   const menu = useMemo(
     () => (
       <Menu className={style[`${PREFIX}-menu`]}>
@@ -40,12 +45,9 @@ const FHeader = ({ title }: IFHeaderProps) => {
               icon: <ExclamationCircleOutlined />,
               content: '确定退出此账号么',
               onOk() {
-                return new Promise((resolve, reject) => {
-                  setLogout().finally(() => {
-                    resolve(null);
-                    dispatch(logout());
-                    history.push('/login');
-                  });
+                return setLogout().finally(() => {
+                  dispatch(signOut());
+                  // history.push('/login');
                 });
               },
             });
@@ -55,7 +57,7 @@ const FHeader = ({ title }: IFHeaderProps) => {
         </Menu.Item>
       </Menu>
     ),
-    [dispatch, history]
+    [dispatch]
   );
   return (
     <div className={style[PREFIX]}>
@@ -63,20 +65,19 @@ const FHeader = ({ title }: IFHeaderProps) => {
         <Col span={12}>
           <h2 className={style[`${PREFIX}-title`]}>{title}</h2>
         </Col>
-        <Col span={12}>
-          <div className={style[`${PREFIX}-right`]}>
-            <span className={style[`${PREFIX}-right-badge`]}>
-              <Badge count={0}>
-                <BellOutlined style={{ fontSize: 16 }} />
-              </Badge>
+        <Col span={12} style={{ textAlign: 'right' }}>
+          <div className={style[`${PREFIX}-box`]}>
+            <Badge count={infoNum}>
+              <BellOutlined onClick={() => history.push('/info')} style={{ fontSize: 22 }} />
+            </Badge>
+            <span style={{ marginLeft: 15 }}>
+              <Dropdown overlay={menu} arrow placement="bottomRight">
+                <div className={style[`${PREFIX}-user`]}>
+                  <Avatar icon={<UserOutlined />} />
+                  <span className={style[`${PREFIX}-name`]}>{info.userName}</span>
+                </div>
+              </Dropdown>
             </span>
-
-            <Dropdown overlay={menu} arrow placement="bottomCenter">
-              <span className={style[`${PREFIX}-user`]}>
-                <Avatar icon={<UserOutlined />} />
-                <span className={style[`${PREFIX}-name`]}>{userName}</span>
-              </span>
-            </Dropdown>
           </div>
         </Col>
       </Row>

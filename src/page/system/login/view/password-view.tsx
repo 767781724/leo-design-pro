@@ -1,32 +1,48 @@
-import { getUserData } from '@src/redux/actions/user';
-import { IRootState } from '@src/redux/reducers';
 import { Alert, Form, Input, Checkbox, Button } from 'antd';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { useLocalStorage } from './hook';
+import { login } from '@src/apis/system/user';
+import { getMenuTree } from '@src/apis/system/menu';
+import { setUserInfo } from '@src/store/user';
+import { RootState } from '@src/store';
+import { useHistory } from 'react-router';
 
 const PasswordView = () => {
-  const { loading, error } = useSelector((state: IRootState) => state.user);
+  const { isLogin } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   const [account, setAccount, removeAccount] = useLocalStorage('USER_ACCOUNT');
-
-  const onFinish = (values: any) => {
-    const { account, password, remember } = values;
+  const history = useHistory();
+  const [error, setError] = useState<string>();
+  const [loading, setLoading] = useState(false);
+  const onFinish = async (values: any) => {
+    const { workNo, password, remember } = values;
     if (remember) {
-      setAccount(account);
+      setAccount(workNo);
     } else {
       removeAccount();
     }
-    dispatch(getUserData({ account, password }));
+    try {
+      setLoading(true);
+      const user = await login({ workNo, password });
+      const menu = await getMenuTree({ token: user.data.token });
+      dispatch(setUserInfo({ info: user.data, menus: menu.data, auths: [] }));
+    } catch (error) {
+      setError(error.msg);
+      setLoading(false);
+    }
   };
+  useEffect(() => {
+    if (isLogin) history.push('/');
+  }, [isLogin, history]);
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
   return (
     <div>
-      {error && <Alert style={{ marginBottom: 24 }} message={error.msg} type="error" closable />}
+      {error && <Alert style={{ marginBottom: 24 }} message={error} type="error" closable />}
       <Form
         size="large"
         initialValues={{ remember: true }}
@@ -34,9 +50,9 @@ const PasswordView = () => {
         onFinishFailed={onFinishFailed}
       >
         <Form.Item
-          name="account"
+          name="workNo"
           initialValue={account}
-          rules={[{ required: true, message: intl.get('rule_username') }]}
+          rules={[{ required: true, message: '请输入工单号' }]}
         >
           <Input
             prefix={<UserOutlined style={{ color: '#1890FF' }} />}

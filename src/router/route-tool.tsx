@@ -2,8 +2,9 @@ import { lazy, ReactNode } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { IRouteItemProps } from './types';
 import _ from 'lodash';
-import { IMenuConfigs, IRouteConfigs } from '@src/types/system';
-import store from '@src/redux/store';
+import { IRouteConfigs } from '@src/types/system';
+import store from '@src/store';
+import { IMenuConfigs } from '@src/types/model/menu';
 
 const constantsRoutes: Array<IRouteConfigs> = [
   {
@@ -49,7 +50,7 @@ export const generatorDynamicRouter = (data: IMenuConfigs[]) => {
  */
 export const listToRoute = (list: IMenuConfigs[], routes: IRouteConfigs[]) => {
   list.forEach((e, index) => {
-    if (e.component && e.component !== 'PageView' && e.path) {
+    if (!!e.component && e.component !== 'PageView' && !!e.path) {
       const child = {
         path: e.path,
         component: e.component,
@@ -80,8 +81,8 @@ export const buildRouteNode = (config: Array<IRouteConfigs>): ReactNode[] => {
       exact: e.exact,
       render: (props) => {
         // 验证登录 拦截
-        const { login } = store.getState().user;
-        if (e.auth && login === false) {
+        const { isLogin } = store.getState().user;
+        if (e.auth && isLogin === false) {
           return <Redirect to="/login" />;
         }
         // 子路由嵌套

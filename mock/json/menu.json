@@ -53,8 +53,7 @@
         "component": "system/account/center",
         "type": 0,
         "show": true,
-        "sort": 100,
-        "redirect": "/account/"
+        "sort": 100
       },
       {
         "id": "menu-account-setting",
